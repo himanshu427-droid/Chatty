@@ -1,8 +1,8 @@
-# Fullstack Chat App
+# Chatty
 
 ## Introduction
 
-Fullstack Chat App is a real-time messaging platform built using the MERN stack. It provides a seamless chat experience through web sockets, supporting one-on-one and group messaging. The application uses robust authentication and maintains chat histories, making it suitable for both personal and professional communication.
+Chatty is a real-time messaging platform built using the MERN stack. It provides a seamless chat experience through web sockets, supporting one-on-one and group messaging. The application uses robust authentication and maintains chat histories, making it suitable for both personal and professional communication.
 
 ## Features
 
@@ -27,8 +27,8 @@ Fullstack Chat App is a real-time messaging platform built using the MERN stack.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/himanshu427-droid/fullstack-chat-app.git
-cd fullstack-chat-app
+git clone https://github.com/himanshu427-droid/chatty.git
+cd chatty
 ```
 
 ### 2. Install server dependencies
