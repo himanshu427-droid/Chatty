@@ -111,26 +111,15 @@ flowchart TD
 
 ## API Endpoints
 
-### User Registration
-#### POST /api/user
-
-### User Login
-#### POST /api/user/login
-
-### Get All Users
-#### GET /api/user?search=query
-
-### Create Chat
-#### POST /api/chat
-
-### Fetch User Chats
-#### GET /api/chat
-
-### Send a Message
-#### POST /api/message
-
-### Fetch Chat Messages
-#### GET /api/message/:chatId
+| Method | Endpoint |
+|------|---------|
+| POST | /api/user |
+| POST | /api/user/login |
+| GET | /api/user?search=query |
+| POST | /api/chat |
+| GET | /api/chat |
+| POST | /api/message |
+| GET | /api/message/:chatId |
 
 
 
