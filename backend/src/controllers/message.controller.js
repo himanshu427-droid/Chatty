@@ -47,7 +47,11 @@ export const sendMessage = async(req,res)=>{
         if(image)
         {
             //Upload base64 image to cloudinary
-            const uploadResponse = await cloudinary.uploader.upload(image);
+            const uploadResponse = await cloudinary.uploader.upload(image,{
+                transformation: [
+                    { width: 1024, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' }
+                ],
+            });
             imageUrl = uploadResponse.secure_url;
         }
         const newMessage = new Message({
