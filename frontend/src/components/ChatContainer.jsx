@@ -53,6 +53,7 @@ const ChatContainer = () => {
 
     const link = document.createElement("a");
     link.href = imageUrl;
+    link.target = "_blank";
     link.download = "chat-image";
     document.body.appendChild(link);
     link.click();
@@ -111,28 +112,31 @@ const ChatContainer = () => {
                           }
                         `}
             >
-              {!message.deleted && message.senderId === authUser._id && (
+              {!message.deleted  && (
                 <div className="absolute -top-2 -right-2 z-10">
-                  <button
-                    type="button"
-                    onClick={() => setOpenMenuId(openMenuId === message._id ? null : message._id)}
-                    className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity rounded-full bg-base-100/80 p-1 shadow-sm"
-                  >
-                    <MoreVertical className="text-base-content" size={14} />
-                  </button>
+                  {!message.deleted && (message.image || message.senderId === authUser._id) && (
+                    <button
+                      type="button"
+                      onClick={() => setOpenMenuId(openMenuId === message._id ? null : message._id)}
+                      className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity rounded-full bg-base-100/80 p-1 shadow-sm"
+                    >
+                      <MoreVertical className="text-base-content" size={14} />
+                    </button>
+                  ) }
 
                   {openMenuId === message._id && (
                     <div className="absolute right-0 mt-1 w-32 rounded-lg border border-base-300 bg-base-100 p-1 shadow-lg">
-                      {message.image && !message.deleted && (
+                      {!message.deleted && message.image && (
                         <button
                           type="button"
                           onClick={() => handleDownloadImage(message.image)}
                           className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-base-content hover:bg-base-200"
                         >
                           <Download size={14} />
-                          Download
+                          Save
                         </button>
                       )}
+                      { message.senderId === authUser._id && (
                       <button
                         type="button"
                         onClick={() => handleDeleteMessage(message._id)}
@@ -141,6 +145,8 @@ const ChatContainer = () => {
                         <Trash2 size={14} />
                         Delete
                       </button>
+                      )
+                      }
                     </div>
                   )}
                 </div>
