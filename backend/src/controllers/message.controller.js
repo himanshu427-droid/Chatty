@@ -101,10 +101,16 @@ export const deleteMessage = async(req,res)=>{
             { new: true }
         );
 
+        // Emit deletion to both sender and receiver for real-time sync
         const receiverSocketId = getReceiverSocketId(message.receiverId);
+        const senderSocketId = getReceiverSocketId(message.senderId);
 
         if(receiverSocketId){
             io.to(receiverSocketId).emit("messageDeleted", { message: updatedMessage });
+        }
+
+        if(senderSocketId){
+            io.to(senderSocketId).emit("messageDeleted", { message: updatedMessage });
         }
 
         res.status(200).json(updatedMessage);
