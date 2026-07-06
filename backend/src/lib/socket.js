@@ -18,7 +18,8 @@ const io = new Server(server, {
 const userSocketMap = new Map();
 
 export function getReceiverSocketId(userId) {
-    const set = userSocketMap.get(userId);
+    const key = String(userId);
+    const set = userSocketMap.get(key);
     // return one socket id (prefer the latest)
     return set ? Array.from(set).pop() : undefined;
 }
@@ -34,9 +35,10 @@ io.on("connection", (socket) => {
     const userId = socket.handshake?.auth?.userId || socket.handshake?.query?.userId;
 
     if (userId) {
-        const existing = userSocketMap.get(userId) || new Set();
+        const uid = String(userId);
+        const existing = userSocketMap.get(uid) || new Set();
         existing.add(socket.id);
-        userSocketMap.set(userId, existing);
+        userSocketMap.set(uid, existing);
     }
 
     emitOnlineUsers();

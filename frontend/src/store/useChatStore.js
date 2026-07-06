@@ -77,11 +77,22 @@ export const useChatStore = create((set, get)=>({
         });
 
         socket.on("messageDeleted", ({ message }) => {
-            set({
-                messages: get().messages.map((item) =>
-                    item._id === message._id ? message : item
-                ),
-            });
+            // Update the message in local state immediately
+            const updatedMessages = get().messages.map((item) =>
+                item._id === message._id ? message : item
+            );
+            set({ messages: updatedMessages });
+
+            // Also silently re-fetch to ensure both sides are in sync
+            // This handles cases where the socket event might not fully propagate
+            axiosInstance
+                .get(`/messages/${selectedUser._id}`)
+                .then((res) => {
+                    set({ messages: res.data });
+                })
+                .catch((err) => {
+                    console.error("Failed to sync deleted messages:", err);
+                });
         });
     },
 
