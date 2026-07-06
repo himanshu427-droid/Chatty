@@ -74,4 +74,47 @@ export const sendMessage = async(req,res)=>{
 }
 
 
+export const deleteMessage = async(req,res)=>{
+    try {
+        const {id: messageId} = req.params;
+        const userId = req.user._id;
+        console.log(userId)
 
+        const message = await Message.findById(messageId);
+
+        if(!message){
+            return res.status(404).json({error: "Message not found"});
+        }
+
+        console.log(message.senderId.toString())
+        if(message.senderId.toString() !== userId.toString()){
+            return res.status(403).json({error: "Not authorized to delete this message"});
+        }
+
+        const updatedMessage = await Message.findByIdAndUpdate(
+            messageId,
+            {
+                text: "deleted",
+                image: null,
+                deleted: true,
+            },
+            { new: true }
+        );
+
+        const receiverSocketId = getReceiverSocketId(message.receiverId);
+
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("messageDeleted", { message: updatedMessage });
+        }
+
+        res.status(200).json(updatedMessage);
+
+        
+    } catch (error) {
+        console.log("Error in deleting message: ", error.message);
+        res.status(500).json({error: "Internal Server Error"});
+        
+    }
+
+
+}

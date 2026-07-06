@@ -17,7 +17,7 @@ export function getReceiverSocketId(userId) {
 };
 
 const userSocketMap = {
-
+    
 };
 
 io.on("connection",(socket)=>{

@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js'
-import { Camera, Mail, User } from 'lucide-react';
+import { Camera, Mail, User, Edit3, Check } from 'lucide-react';
 
 const ProfilePage = () => {
     const {authUser, isUpdatingProfile, updateProfile} = useAuthStore();
     const [selectedImg, setSelectedImg] = useState(null);
+    const [fullName, setFullName] = useState(authUser?.fullName || '');
+    const [bio, setBio] = useState(authUser?.bio || '');
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [isEditingBio, setIsEditingBio] = useState(false);
 
     const handleImageUpload = async(e)=>{
         const file = e.target.files[0];
@@ -18,6 +22,16 @@ const ProfilePage = () => {
             setSelectedImg(base64Image);
             await updateProfile({profilePic: base64Image});
         }
+    }
+
+    const handleSaveName = async () => {
+        await updateProfile({ fullName });
+        setIsEditingName(false);
+    }
+
+    const handleSaveBio = async () => {
+        await updateProfile({ bio });
+        setIsEditingBio(false);
     }
 
    return (
@@ -65,11 +79,61 @@ const ProfilePage = () => {
 
           <div className="space-y-6">
             <div className="space-y-1.5">
-                <div className="text-sm text-zinc-400 flex items-center gap-2">
-                    <User className="size-4"/>
-                    Full Name
+                <div className="text-sm text-zinc-400 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <User className="size-4"/>
+                        Full Name
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => isEditingName ? handleSaveName() : setIsEditingName(true)}
+                        disabled={isUpdatingProfile}
+                        className="text-sm flex items-center gap-1 text-primary"
+                    >
+                        {isEditingName ? <Check className="size-4" /> : <Edit3 className="size-4" />}
+                        {isEditingName ? 'Save' : 'Edit'}
+                    </button>
                 </div>
-                <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.fullName}</p>
+                {isEditingName ? (
+                    <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-base-200 rounded-lg border border-base-300 outline-none"
+                        placeholder="Enter your full name"
+                    />
+                ) : (
+                    <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.fullName}</p>
+                )}
+            </div>
+
+            <div className="space-y-1.5">
+                <div className="text-sm text-zinc-400 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <User className="size-4"/>
+                        Bio
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => isEditingBio ? handleSaveBio() : setIsEditingBio(true)}
+                        disabled={isUpdatingProfile}
+                        className="text-sm flex items-center gap-1 text-primary"
+                    >
+                        {isEditingBio ? <Check className="size-4" /> : <Edit3 className="size-4" />}
+                        {isEditingBio ? 'Save' : 'Edit'}
+                    </button>
+                </div>
+                {isEditingBio ? (
+                    <textarea
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        rows="3"
+                        className="w-full px-4 py-2.5 bg-base-200 rounded-lg border border-base-300 outline-none resize-none"
+                        placeholder="Write a short about"
+                    />
+                ) : (
+                    <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.bio || 'No bio added'}</p>
+                )}
             </div>
 
             <div className="space-y-1.5">

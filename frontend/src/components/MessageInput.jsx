@@ -69,9 +69,20 @@ const MessageInput = () => {
 
       <form onSubmit={handleSendMessage} className='flex items-center gap-2'>
         <div className="flex-1 flex gap-2">
-            <input type='text' className='w-full input input-bordered rounded-lg input-sm sm:input-md'
-            placeholder="Type a message..."
-            value={text} onChange={(e)=> setText(e.target.value)} />
+            <textarea className="w-full textarea textarea-bordered rounded-lg input-sm sm:input-md resize-none leading-tight py-2 min-h-0 h-10 overflow-hidden"
+              placeholder="Type a message..."
+              value={text} onChange={(e)=> setText(e.target.value)} 
+              rows={1}   
+              onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      handleSendMessage(e);
+                    }
+                  }}
+              onInput={(e) => {
+                e.target.style.height = "40px";
+                e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+              }}
+            />
            
              <input
                 type="file"
@@ -83,7 +94,7 @@ const MessageInput = () => {
 
              <button 
                type="button"
-               className={`hidden sm:flex btn btn-circle
+               className={`sm:flex btn btn-circle
                   ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
                 onClick={()=>fileInputRef.current?.click()}
              >
