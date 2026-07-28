@@ -77,7 +77,6 @@ export const useChatStore = create((set, get)=>({
         });
 
         socket.on("messageDeleted", ({ message }) => {
-            // Update the message in local state immediately
             const updatedMessages = get().messages.map((item) =>
                 item._id === message._id ? message : item
             );

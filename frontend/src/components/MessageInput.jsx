@@ -1,30 +1,36 @@
 import React, { useRef, useState } from 'react'
 import { useChatStore } from '../store/useChatStore.js';
 import { Image, Send, X } from 'lucide-react';
+import { resizeAndCompressImage } from '../lib/imageUtils.js';
 
 const MessageInput = () => {
     const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState(null);
+    const [rawImageFile, setRawImageFile] = useState(null);
     const fileInputRef = useRef(null);
     const { sendMessage } = useChatStore();
 
     const handleImageChange = async(e) =>{
         const file = e.target.files[0];
+        if(!file) return;
         if(!file.type.startsWith("image/")){
             toast.error("Please select an image file");
             return;
         }
-        
-        const reader = new FileReader();
-        reader.onloadend = () =>{
-            setImagePreview(reader.result);
-        };
 
-        reader.readAsDataURL(file);
+        try {
+            const compressedDataUrl = await resizeAndCompressImage(file, 1024, 0.78);
+            setImagePreview(compressedDataUrl);
+            setRawImageFile(file);
+        } catch (error) {
+            console.error("Image processing failed:", error);
+            toast.error("Unable to process the selected image. Please try a different file.");
+        }
     };
 
     const removeImage = () => {
         setImagePreview(null);
+        setRawImageFile(null);
         if(fileInputRef.current) fileInputRef.current.value = "";
     };
 
@@ -37,10 +43,10 @@ const MessageInput = () => {
                 text: text.trim(),
                 image: imagePreview,
             });
-            
-            //Clear the form
+
             setText("");
             setImagePreview(null);
+            setRawImageFile(null);
             if(fileInputRef.current) fileInputRef.current.value = "";
 
         } catch (error) {

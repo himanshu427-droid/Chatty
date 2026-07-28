@@ -74,6 +74,22 @@ export const useAuthStore = create((set, get)=>({
         }
     },
 
+    loginWithGoogle : async(idToken) => {
+        try {
+            const res = await axiosInstance.post("/auth/google-login", {idToken,});
+            set({authUser: res.data});
+            toast.success("Logged in with Gmail successfully!");
+            get().connectSocket();
+        } catch (error) {
+            console.error("Failed Gmail login")
+            toast.error(error.response?.data?.message || "Gmail login failed")
+            
+        }
+        finally{
+            set({isLoggingIn: false})
+        }
+    },
+
     updateProfile: async(data)=>{
         set({isUpdatingProfile: true});
         try {

@@ -2,6 +2,7 @@ import { generateToken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import { verifyIdToken } from "../lib/firebase-admin.js";
 
 export const signup = async (req, res) => {
 
@@ -87,6 +88,45 @@ export const login = async(req,res)=>{
 
     
 };
+
+export const googleLogin = async(req, res) => {
+    try {
+        const {idToken} = req.body;
+        if(!idToken){
+            return res.status(400).json({message: "Id token is required"});
+        }
+
+        const decodedToken = await verifyIdToken(idToken);
+        const {email, name: fullName, picture: profilePic} = decodedToken;
+        
+        let user = await User.findOne({email});
+
+        if(!user){
+            user = new User({
+                email,
+                fullName: fullName || "User",
+                password: "",
+                profilePic: profilePic || "",
+            })
+
+            await user.save();
+        }
+
+        generateToken(user._id, res);
+
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullName, 
+            email: user.email,
+            profilePic: user.profilePic,
+        })
+
+        
+    } catch (error) {
+        console.error("Error in google login: ", error.message );
+        res.status(400).json({message: "Google login failed"})
+    }
+}
 
 export const logout = async(req,res)=>{
     try{
