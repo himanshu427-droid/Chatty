@@ -1,6 +1,6 @@
 import {initializeApp, cert} from "firebase-admin/app";
 import {getAuth} from "firebase-admin/auth";
-import serviceAccount from "../../firebase_service_account.json" with {type: "json"};
+// import serviceAccount from "../../firebase_service_account.json" with {type: "json"};
 import {config} from "dotenv";
 
 config()
