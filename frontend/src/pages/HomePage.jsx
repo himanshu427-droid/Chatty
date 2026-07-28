@@ -3,12 +3,14 @@ import Sidebar from '../components/Sidebar.jsx'
 import NoChatSelected from '../components/NoChatSelected.jsx'
 import ChatContainer from '../components/ChatContainer.jsx'
 import { useChatStore } from '../store/useChatStore.js'
+import { auth } from '../lib/firebase.js'
 import { useThemeStore } from '../store/useThemeStore.js'
 
 const HomePage = () => {
 
     const { selectedUser } = useChatStore();
     const {theme} = useThemeStore();
+
 
   return (
     <div className="h-screen bg-base-300  data-theme={theme}">

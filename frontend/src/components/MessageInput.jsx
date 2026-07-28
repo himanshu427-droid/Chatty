@@ -43,8 +43,7 @@ const MessageInput = () => {
                 text: text.trim(),
                 image: imagePreview,
             });
-            
-            // Clear the form
+
             setText("");
             setImagePreview(null);
             setRawImageFile(null);

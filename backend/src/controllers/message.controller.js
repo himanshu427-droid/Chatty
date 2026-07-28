@@ -46,7 +46,6 @@ export const sendMessage = async(req,res)=>{
         let imageUrl;
         if(image)
         {
-            //Upload base64 image to cloudinary
             const uploadResponse = await cloudinary.uploader.upload(image,{
                 transformation: [
                     { width: 1024, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' }
@@ -105,7 +104,6 @@ export const deleteMessage = async(req,res)=>{
             { new: true }
         );
 
-        // Emit deletion to both sender and receiver for real-time sync
         const receiverSocketId = getReceiverSocketId(message.receiverId);
         const senderSocketId = getReceiverSocketId(message.senderId);
 
