@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Chatty is a real-time messaging platform built using the MERN stack. It provides a seamless chat experience through web sockets, supporting one-on-one and group messaging. The application uses robust authentication and maintains chat histories, making it suitable for both personal and professional communication.
+Chatty is a real-time messaging platform built using the MERN stack. It provides a seamless chat experience through web sockets, supporting one-on-one messaging. The application uses robust authentication and maintains chat histories, making it suitable for both personal and professional communication.
 
 ## Features
 
 - User authentication with JWT
 - Real-time chat via WebSockets (Socket.IO)
-- One-on-one and group chat support
+- One-on-one chat support
 - Persistent message histories
 - User search functionality
 - Profile management
@@ -75,7 +75,6 @@ The frontend will typically run on `http://localhost:3000` and the backend on `h
 
 - Register a new account or log in with existing credentials.
 - Start new chats by searching for users.
-- Create and manage group chats.
 - Send and receive messages in real time.
 - Manage your profile and view chat histories.
 
@@ -115,7 +114,6 @@ flowchart TD
 |------|---------|
 | POST | /api/user |
 | POST | /api/user/login |
-| GET | /api/user?search=query |
 | POST | /api/chat |
 | GET | /api/chat |
 | POST | /api/message |
